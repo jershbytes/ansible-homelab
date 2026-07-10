@@ -1,0 +1,7 @@
+---
+- name: Upgrade all dnf based packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+  tags: skip_ansible_lint

@@ -1,0 +1,6 @@
+---
+releases:
+  0.1.0:
+    release_date: "2026-07-10"
+    changes:
+      release_summary: Initial collection release.

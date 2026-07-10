@@ -1,0 +1,14 @@
+---
+- name: Refresh apt package cache
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Upgrade all deb based packages
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+  tags: skip_ansible_lint
+
+- name: Autoremove unused packages using apt
+  ansible.builtin.apt:
+    autoremove: true

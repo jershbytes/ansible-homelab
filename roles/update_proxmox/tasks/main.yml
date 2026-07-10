@@ -1,0 +1,24 @@
+---
+- name: Get Hostnames
+  ansible.builtin.debug:
+    msg: "{{ ansible_hostname }}:{{ ansible_default_ipv4.address }}"
+
+- name: Perform a dist-upgrade.
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: true
+
+- name: Check if a reboot is required.
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: update_proxmox_reboot_required_file
+
+- name: Remove dependencies that are no longer required.
+  ansible.builtin.apt:
+    autoremove: true
+
+- name: Reboot the system if required.
+  ansible.builtin.reboot:
+    msg: "Rebooting the system after upgrade"
+    reboot_timeout: 600
+  when: update_proxmox_reboot_required_file.stat.exists

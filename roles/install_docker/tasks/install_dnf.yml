@@ -1,0 +1,36 @@
+---
+- name: Upgrade all packages on the server
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+  tags: skip_ansible_lint
+
+- name: Uninstall old versions
+  ansible.builtin.dnf:
+    name:
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-engine
+    state: absent
+
+- name: Set up docker repository
+  ansible.builtin.yum_repository:
+    name: docker-ce
+    description: docker-ce repository
+    baseurl:
+      - https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: Install the latest version of docker engine and containerd
+  ansible.builtin.dnf:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+  notify:
+    - Start and enable docker
+    - Add current user to the docker group

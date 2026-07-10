@@ -1,0 +1,13 @@
+---
+- name: Start and enable docker
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Add current user to the docker group
+  ansible.builtin.user:
+    name: "{{ install_docker_additional_user }}"
+    groups:
+      - docker
+    append: true

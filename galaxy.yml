@@ -1,0 +1,31 @@
+namespace: jershbytes
+name: homelab
+version: 0.1.0
+readme: README.md
+authors:
+  - JershBytes
+description: Roles for homelab provisioning and post-provision hardening.
+license:
+  - MIT
+tags:
+  - linux
+  - infrastructure
+  - tools
+  - homelab
+  - provisioning
+  - docker
+  - updates
+repository: https://github.com/jershbytes/ansible-homelab
+documentation: https://github.com/jershbytes/ansible-homelab#readme
+homepage: https://github.com/jershbytes/ansible-homelab
+issues: https://github.com/jershbytes/ansible-homelab/issues
+dependencies:
+  community.general: "*"
+  ansible.posix: "*"
+build_ignore:
+  - .git
+  - .github
+  - .vscode
+  - .ansible
+  - .venv
+  - dist

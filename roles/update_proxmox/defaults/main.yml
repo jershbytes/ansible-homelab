@@ -1,0 +1,3 @@
+---
+# Default values for the role
+update_proxmox_reboot_timeout: 600   # Default timeout for reboot after upgrade

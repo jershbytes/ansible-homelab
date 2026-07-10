@@ -1,0 +1,21 @@
+---
+
+- name: Update debian based systems
+  ansible.builtin.include_tasks: update_apt.yml
+  when: ansible_facts['pkg_mgr'] == 'apt'
+
+- name: Update rhel based systems
+  ansible.builtin.include_tasks: update_dnf.yml
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Check if a reboot is required.
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: update_packages_reboot_required_file
+
+- name: Reboot the system if required
+  become: true
+  ansible.builtin.reboot:
+    msg: "Rebooting the system as /run/reboot-required file exists"
+    reboot_timeout: 600
+  when: update_packages_reboot_required_file.stat.exists
