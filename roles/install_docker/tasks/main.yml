@@ -6,3 +6,10 @@
 - name: Include DNF tasks
   ansible.builtin.include_tasks: install_dnf.yml
   when: ansible_facts['pkg_mgr'] == 'dnf'
+
+- name: Add secondary user to docker group
+  ansible.builtin.user:
+    name: "{{ additional_docker_user }}"
+    groups:
+      - docker
+    append: true

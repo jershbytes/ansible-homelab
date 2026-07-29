@@ -1,2 +1,2 @@
 ---
-install_docker_additional_user: admin
+additional_docker_user: ""
