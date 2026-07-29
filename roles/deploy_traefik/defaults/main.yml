@@ -9,4 +9,4 @@ acme_provider: "" # Comment this line to completly disable acme
 traefik_dir: "/opt/docker/traefik"
 traefik_api_url: ""
 traefik_api_user: ""
-certResolver: ""
+certresolver: ""
