@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT-0
+---
+# defaults file for deploy_traefik
+
+acme_email: ""
+acme_domain: ""
+acme_provider: "" # Comment this line to completly disable acme
+
+traefik_dir: "/opt/docker/traefik"
+traefik_api_url: ""
+traefik_api_user: ""
+certResolver: ""
