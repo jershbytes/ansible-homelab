@@ -3,3 +3,28 @@
   community.general.pacman:
     update_cache: true
     upgrade: true
+
+- name: Get the running kernel release (Archlinux)
+  ansible.builtin.command: uname -r
+  register: update_packages_running_kernel
+  changed_when: false
+
+# The installed kernel's module directory under /usr/lib/modules uses the
+# exact same version string as `uname -r`, unlike `pacman -Q linux` whose
+# format differs (dots vs. dashes). Comparing against it avoids false
+# positives from format mismatches.
+- name: Get the installed kernel module directories (Archlinux)
+  ansible.builtin.find:
+    paths: /usr/lib/modules
+    file_type: directory
+    recurse: false
+  register: update_packages_installed_kernels
+
+- name: Set reboot-required flag (Archlinux)
+  ansible.builtin.set_fact:
+    update_packages_reboot_required: >-
+      {{ update_packages_running_kernel.stdout
+         not in (update_packages_installed_kernels.files
+                 | map(attribute='path')
+                 | map('basename')
+                 | list) }}

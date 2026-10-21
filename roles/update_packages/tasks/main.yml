@@ -1,25 +1,19 @@
 ---
+- name: Get Hostnames
+  ansible.builtin.debug:
+    msg: "{{ ansible_hostname }}:{{ ansible_default_ipv4.address }}"
 
-- name: Update debian based systems
-  ansible.builtin.include_tasks: update_apt.yml
-  when: ansible_facts['pkg_mgr'] == 'apt'
+- name: Default the reboot-required flag to false
+  ansible.builtin.set_fact:
+    update_packages_reboot_required: false
 
-- name: Update rhel based systems
-  ansible.builtin.include_tasks: update_dnf.yml
-  when: ansible_facts['pkg_mgr'] == 'dnf'
-
-- name: Update arch based systems
-  ansible.builtin.include_tasks: update_pacman.yml
-  when: ansible_facts['pkg_mgr'] == 'pacman'
-
-- name: Check if a reboot is required.
-  ansible.builtin.stat:
-    path: /var/run/reboot-required
-  register: update_packages_reboot_required_file
+- name: Update packages for this OS family
+  ansible.builtin.include_tasks: "{{ update_packages_family_tasks[ansible_os_family] }}"
+  when: ansible_os_family in update_packages_family_tasks
 
 - name: Reboot the system if required
   become: true
   ansible.builtin.reboot:
-    msg: "Rebooting the system as /run/reboot-required file exists"
+    msg: "Rebooting the system because a package update requires it"
     reboot_timeout: 600
-  when: update_packages_reboot_required_file.stat.exists
+  when: update_packages_reboot_required

@@ -1,3 +1,8 @@
+update_packages_family_tasks:
+  Debian: update_apt.yml
+  RedHat: update_dnf.yml
+  Archlinux: update_pacman.yml
+
 ansible_become_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   37376333363163663735326135346432633463383530346336316635653663396466666366396538

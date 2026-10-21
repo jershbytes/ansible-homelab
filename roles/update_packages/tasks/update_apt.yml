@@ -12,3 +12,12 @@
 - name: Autoremove unused packages using apt
   ansible.builtin.apt:
     autoremove: true
+
+- name: Check if a reboot is required (Debian)
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: update_packages_apt_reboot_file
+
+- name: Set reboot-required flag (Debian)
+  ansible.builtin.set_fact:
+    update_packages_reboot_required: "{{ update_packages_apt_reboot_file.stat.exists }}"

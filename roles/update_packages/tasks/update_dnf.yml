@@ -4,4 +4,15 @@
     name: "*"
     state: latest
     update_cache: true
+    allowerasing: true
   tags: skip_ansible_lint
+
+- name: Check if a reboot is required (RedHat)
+  ansible.builtin.command: dnf needs-restarting -r
+  register: update_packages_dnf_needs_restarting
+  changed_when: false
+  failed_when: update_packages_dnf_needs_restarting.rc not in [0, 1]
+
+- name: Set reboot-required flag (RedHat)
+  ansible.builtin.set_fact:
+    update_packages_reboot_required: "{{ update_packages_dnf_needs_restarting.rc == 1 }}"
